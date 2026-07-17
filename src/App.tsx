@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { TopNav } from '@/components/TopNav'
+import { SkyPuffs } from '@/components/SkyPuffs'
 import { CloudDivider } from '@/components/CloudDivider'
 import { AtlasPage } from '@/pages/AtlasPage'
 import { QuizPage } from '@/pages/QuizPage'
@@ -22,6 +23,7 @@ function App() {
   const route = useRoute()
   return (
     <>
+      <SkyPuffs />
       <TopNav route={route} />
       <main className="flex-1">
         {route === 'quiz' ? <QuizPage /> : <AtlasPage />}

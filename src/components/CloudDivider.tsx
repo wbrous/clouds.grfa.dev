@@ -1,3 +1,5 @@
+import { motion, useScroll, useTransform } from 'motion/react'
+
 function CloudPuff({ className }: { className?: string }) {
   return (
     <svg
@@ -20,8 +22,11 @@ function CloudPuff({ className }: { className?: string }) {
 }
 
 export function CloudDivider() {
+  const { scrollY } = useScroll()
+  const y = useTransform(scrollY, [0, 600], [0, 20])
+
   return (
-    <div className="overflow-hidden py-6" aria-hidden>
+    <motion.div className="overflow-hidden py-6" style={{ y }} aria-hidden>
       <div className="cloud-divider-track flex w-max gap-16">
         <CloudPuff className="translate-y-2" />
         <CloudPuff className="-translate-y-1" />
@@ -30,6 +35,6 @@ export function CloudDivider() {
         <CloudPuff className="translate-y-1" />
         <CloudPuff className="-translate-y-1" />
       </div>
-    </div>
+    </motion.div>
   )
 }

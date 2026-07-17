@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { Cloud } from '@/data/clouds'
@@ -39,41 +40,60 @@ export function QuizCard({
           const isCorrect = pick.id === cloud.id
           const isPicked = pick.id === picked
           return (
-            <Button
+            <motion.div
               key={pick.id}
-              variant="outline"
-              size="lg"
-              disabled={picked !== null}
-              onClick={() => onPick(pick.id)}
-              className={cn(
-                'h-auto rounded-[var(--radius-md)] border-border bg-card py-3 font-heading text-lg whitespace-normal',
-                picked !== null &&
-                  isCorrect &&
-                  'border-primary bg-primary text-primary-foreground hover:bg-primary',
-                picked !== null &&
-                  isPicked &&
-                  !isCorrect &&
-                  'border-destructive bg-destructive/15 text-destructive hover:bg-destructive/15',
-                picked !== null && !isCorrect && !isPicked && 'opacity-50',
-              )}
+              whileHover={picked === null ? { scale: 1.03 } : undefined}
+              whileTap={picked === null ? { scale: 0.97 } : undefined}
+              transition={{
+                type: 'spring',
+                visualDuration: 0.25,
+                bounce: 0.4,
+              }}
             >
-              {pick.name}
-            </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                disabled={picked !== null}
+                onClick={() => onPick(pick.id)}
+                className={cn(
+                  'h-auto w-full rounded-[var(--radius-md)] border-white/50 bg-card glass py-3 font-heading text-lg whitespace-normal',
+                  picked !== null &&
+                    isCorrect &&
+                    'border-primary bg-primary! text-primary-foreground hover:bg-primary!',
+                  picked !== null &&
+                    isPicked &&
+                    !isCorrect &&
+                    'border-destructive bg-destructive/15! text-destructive hover:bg-destructive/15!',
+                  picked !== null && !isCorrect && !isPicked && 'opacity-50',
+                )}
+              >
+                {pick.name}
+              </Button>
+            </motion.div>
           )
         })}
       </div>
-      {picked !== null && (
-        <div className="flex flex-col items-center gap-3">
-          <p className="text-center text-lg">
-            {picked === cloud.id
-              ? `Yes — that's ${cloud.name}.`
-              : `Not quite — that's ${cloud.name}.`}
-          </p>
-          <Button size="lg" onClick={onNext}>
-            {isLast ? 'See my score' : 'Next cloud'}
-          </Button>
-        </div>
-      )}
+      <AnimatePresence>
+        {picked !== null && (
+          <motion.div
+            key="feedback"
+            initial={{ opacity: 0, y: 12, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: 'spring', visualDuration: 0.3, bounce: 0.2 }}
+            className="flex flex-col items-center gap-3"
+          >
+            <p className="text-center text-lg">
+              {picked === cloud.id
+                ? `Yes — that's ${cloud.name}.`
+                : `Not quite — that's ${cloud.name}.`}
+            </p>
+            <Button size="lg" onClick={onNext}>
+              {isLast ? 'See my score' : 'Next cloud'}
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

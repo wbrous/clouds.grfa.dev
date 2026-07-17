@@ -1,11 +1,22 @@
+import { useState } from 'react'
 import { CloudSun } from 'lucide-react'
+import { motion, useMotionValueEvent, useScroll } from 'motion/react'
 import { cn } from '@/lib/utils'
 
 type Route = 'atlas' | 'quiz'
 
 export function TopNav({ route }: { route: Route }) {
+  const { scrollY } = useScroll()
+  const [scrolled, setScrolled] = useState(false)
+  useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 24))
+
   return (
-    <header className="sticky top-0 z-10 bg-background/70 backdrop-blur">
+    <header
+      className={cn(
+        'sticky top-0 z-10 glass transition-shadow',
+        scrolled && 'glass-scrolled',
+      )}
+    >
       <nav className="flex items-center justify-center gap-3 px-4 py-3">
         <a
           href="#/"
@@ -38,12 +49,19 @@ function NavPill({
     <a
       href={href}
       className={cn(
-        'rounded-full border border-border px-4 py-1.5 text-sm font-medium no-underline transition-colors',
+        'relative z-0 rounded-full border border-border px-4 py-1.5 text-sm font-medium no-underline transition-colors',
         active
-          ? 'border-primary bg-primary text-primary-foreground'
-          : 'bg-card text-foreground hover:bg-muted',
+          ? 'border-primary text-primary-foreground'
+          : 'glass text-foreground hover:bg-white/70',
       )}
     >
+      {active && (
+        <motion.span
+          layoutId="nav-pill-active"
+          className="absolute inset-0 rounded-full bg-primary"
+          style={{ zIndex: -1 }}
+        />
+      )}
       {children}
     </a>
   )

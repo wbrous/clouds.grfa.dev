@@ -1,10 +1,21 @@
+import { motion } from 'motion/react'
 import { Cloud as CloudIcon } from 'lucide-react'
 import type { Cloud } from '@/data/clouds'
 import { Card, CardContent } from '@/components/ui/card'
 
+const item = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', visualDuration: 0.5, bounce: 0.15 },
+  },
+} as const
+
 export function CloudCard({ cloud }: { cloud: Cloud }) {
   return (
-    <Card className="overflow-hidden pt-0">
+    <motion.div variants={item}>
+      <Card className="overflow-hidden pt-0">
       <img
         src={cloud.image}
         alt={`${cloud.name} clouds`}
@@ -35,11 +46,12 @@ export function CloudCard({ cloud }: { cloud: Cloud }) {
             ))}
           </ul>
         </div>
-        <p className="rounded-lg bg-accent/60 p-3 text-sm text-accent-foreground">
+        <p className="rounded-lg bg-accent/60 glass p-3 text-sm text-accent-foreground">
           {cloud.funFact}
         </p>
         <p className="text-xs text-muted-foreground">{cloud.credit}</p>
       </CardContent>
-    </Card>
+      </Card>
+    </motion.div>
   )
 }
