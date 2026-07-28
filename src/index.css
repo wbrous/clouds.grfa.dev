@@ -264,6 +264,15 @@ code {
   animation: drift-slow 70s ease-in-out infinite alternate;
 }
 
+/* WebKit will not clip a composited (transformed) child to a rounded
+   overflow:hidden box unless the clipper is promoted to its own layer — without
+   this the liquid escapes the corners on iOS. */
+.liquid-clip {
+  isolation: isolate;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
 /* the wave rendered at 200% width, so -50% is a whole number of periods */
 @keyframes liquid-crest-scroll {
   from {
