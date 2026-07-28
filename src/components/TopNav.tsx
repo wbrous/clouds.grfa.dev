@@ -60,15 +60,16 @@ function NavPill({
           : 'glass text-foreground hover:bg-white/70',
       )}
     >
-      {/* fill/drain like water: grows in from the left when this pill becomes
-          active, and recedes back out to the right when it stops being active */}
+      {/* fill/drain like water: pours in from the left when this pill becomes
+          active and recedes out to the right when it stops, with enough spring
+          to carry the weight of the liquid as it lands */}
       <motion.span
         aria-hidden
         className="absolute inset-0 bg-primary"
         style={{ zIndex: -1, transformOrigin: active ? '0% 50%' : '100% 50%' }}
         initial={false}
         animate={{ scaleX: active ? 1 : 0 }}
-        transition={{ type: 'spring', visualDuration: 0.5, bounce: 0.15 }}
+        transition={{ type: 'spring', visualDuration: 0.55, bounce: 0.3 }}
       />
       {children}
     </motion.a>

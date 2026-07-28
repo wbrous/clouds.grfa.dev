@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
+import { LiquidFill } from '@/components/LiquidFill'
 import { cn } from '@/lib/utils'
 import type { Cloud } from '@/data/clouds'
 
@@ -58,7 +59,7 @@ export function QuizCard({
                 disabled={picked !== null}
                 onClick={() => onPick(pick.id)}
                 className={cn(
-                  'relative isolate h-auto w-full overflow-hidden rounded-[var(--radius-md)] border-white/50 bg-card glass py-3 font-heading text-lg whitespace-normal',
+                  'relative isolate h-auto w-full rounded-[var(--radius-md)] border-white/50 bg-card glass py-3 font-heading text-lg whitespace-normal',
                   picked !== null && isCorrect && 'border-primary text-primary-foreground',
                   picked !== null &&
                     isPicked &&
@@ -67,19 +68,12 @@ export function QuizCard({
                   picked !== null && !isCorrect && !isPicked && 'opacity-50',
                 )}
               >
-                {/* water poured in from the top revealing whether this was
-                    the right call */}
+                {/* the answer fills with water, revealing whether it was the
+                    right call */}
                 {picked !== null && (isCorrect || isPicked) && (
-                  <motion.span
-                    aria-hidden
-                    className={cn(
-                      'absolute inset-0',
-                      isCorrect ? 'bg-primary' : 'bg-destructive/20',
-                    )}
-                    style={{ zIndex: -1, transformOrigin: '50% 0%' }}
-                    initial={{ scaleY: 0 }}
-                    animate={{ scaleY: 1 }}
-                    transition={{ type: 'spring', visualDuration: 0.5, bounce: 0.15 }}
+                  <LiquidFill
+                    splash
+                    className={isCorrect ? 'text-primary' : 'text-destructive/25'}
                   />
                 )}
                 {pick.name}

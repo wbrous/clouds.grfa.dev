@@ -264,9 +264,29 @@ code {
   animation: drift-slow 70s ease-in-out infinite alternate;
 }
 
+/* the wave rendered at 200% width, so -50% is a whole number of periods */
+@keyframes liquid-crest-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* two crests drifting opposite ways read as a surface with depth */
+.liquid-crest {
+  animation: liquid-crest-scroll 2.4s linear infinite;
+}
+.liquid-crest-lag {
+  animation-duration: 3.7s;
+  animation-direction: reverse;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cloud-divider-track,
-  .sky-puff-track {
+  .sky-puff-track,
+  .liquid-crest {
     animation: none;
   }
 }
