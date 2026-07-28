@@ -48,8 +48,11 @@ function NavPill({
   children: React.ReactNode
 }) {
   return (
-    <a
+    <motion.a
       href={href}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.92 }}
+      transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.5 }}
       className={cn(
         'relative z-0 rounded-full border border-border px-4 py-1.5 text-sm font-medium no-underline transition-colors',
         active
@@ -62,9 +65,10 @@ function NavPill({
           layoutId="nav-pill-active"
           className="absolute inset-0 rounded-full bg-primary"
           style={{ zIndex: -1 }}
+          transition={{ type: 'spring', visualDuration: 0.35, bounce: 0.22 }}
         />
       )}
       {children}
-    </a>
+    </motion.a>
   )
 }
