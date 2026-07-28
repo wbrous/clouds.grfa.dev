@@ -59,8 +59,10 @@ export function LiquidFill({ className, splash = false }: LiquidFillProps) {
         className="absolute inset-0 overflow-hidden"
         style={{ borderRadius: 'inherit' }}
       >
+        {/* runs past the bottom of the container so the overshoot at the top
+            cannot lift the body clear of the lower edge and show a sliver */}
         <motion.span
-          className="absolute inset-0"
+          className="absolute inset-x-0 top-0 -bottom-4"
           initial={{ y: '100%' }}
           animate={{ y: '0%' }}
           transition={{ type: 'spring', visualDuration: 0.7, bounce: 0.3 }}
