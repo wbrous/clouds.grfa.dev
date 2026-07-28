@@ -54,20 +54,22 @@ function NavPill({
       whileTap={{ scale: 0.92 }}
       transition={{ type: 'spring', visualDuration: 0.2, bounce: 0.5 }}
       className={cn(
-        'relative z-0 rounded-full border border-border px-4 py-1.5 text-sm font-medium no-underline transition-colors',
+        'relative z-0 overflow-hidden rounded-full border border-border px-4 py-1.5 text-sm font-medium no-underline transition-colors',
         active
           ? 'border-primary text-primary-foreground'
           : 'glass text-foreground hover:bg-white/70',
       )}
     >
-      {active && (
-        <motion.span
-          layoutId="nav-pill-active"
-          className="absolute inset-0 rounded-full bg-primary"
-          style={{ zIndex: -1 }}
-          transition={{ type: 'spring', visualDuration: 0.35, bounce: 0.22 }}
-        />
-      )}
+      {/* fill/drain like water: grows in from the left when this pill becomes
+          active, and recedes back out to the right when it stops being active */}
+      <motion.span
+        aria-hidden
+        className="absolute inset-0 bg-primary"
+        style={{ zIndex: -1, transformOrigin: active ? '0% 50%' : '100% 50%' }}
+        initial={false}
+        animate={{ scaleX: active ? 1 : 0 }}
+        transition={{ type: 'spring', visualDuration: 0.5, bounce: 0.15 }}
+      />
       {children}
     </motion.a>
   )

@@ -58,17 +58,30 @@ export function QuizCard({
                 disabled={picked !== null}
                 onClick={() => onPick(pick.id)}
                 className={cn(
-                  'h-auto w-full rounded-[var(--radius-md)] border-white/50 bg-card glass py-3 font-heading text-lg whitespace-normal',
-                  picked !== null &&
-                    isCorrect &&
-                    'border-primary bg-primary! text-primary-foreground hover:bg-primary!',
+                  'relative isolate h-auto w-full overflow-hidden rounded-[var(--radius-md)] border-white/50 bg-card glass py-3 font-heading text-lg whitespace-normal',
+                  picked !== null && isCorrect && 'border-primary text-primary-foreground',
                   picked !== null &&
                     isPicked &&
                     !isCorrect &&
-                    'border-destructive bg-destructive/15! text-destructive hover:bg-destructive/15!',
+                    'border-destructive text-destructive',
                   picked !== null && !isCorrect && !isPicked && 'opacity-50',
                 )}
               >
+                {/* water poured in from the top revealing whether this was
+                    the right call */}
+                {picked !== null && (isCorrect || isPicked) && (
+                  <motion.span
+                    aria-hidden
+                    className={cn(
+                      'absolute inset-0',
+                      isCorrect ? 'bg-primary' : 'bg-destructive/20',
+                    )}
+                    style={{ zIndex: -1, transformOrigin: '50% 0%' }}
+                    initial={{ scaleY: 0 }}
+                    animate={{ scaleY: 1 }}
+                    transition={{ type: 'spring', visualDuration: 0.5, bounce: 0.15 }}
+                  />
+                )}
                 {pick.name}
               </Button>
             </motion.div>
