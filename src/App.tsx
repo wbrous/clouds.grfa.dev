@@ -60,9 +60,6 @@ function App() {
       </main>
       <footer className="pb-8">
         <CloudDivider />
-        <p className="text-center text-sm text-muted-foreground">
-          Photos from Wikimedia Commons · Built for looking up
-        </p>
         <p className="mt-1 flex items-center justify-center gap-1.5 text-center text-sm text-muted-foreground">
           Made with
           <Heart className="size-3.5 fill-destructive text-destructive" aria-label="love" />
