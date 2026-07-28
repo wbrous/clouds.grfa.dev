@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'motion/react'
 
 function CloudPuff({ className }: { className?: string }) {
@@ -22,19 +23,27 @@ function CloudPuff({ className }: { className?: string }) {
 }
 
 export function CloudDivider() {
+  const ref = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 600], [0, 20])
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  })
+  const x = useTransform(scrollYProgress, [0, 1], [-36, 36])
 
   return (
-    <motion.div className="overflow-hidden py-6" style={{ y }} aria-hidden>
-      <div className="cloud-divider-track flex w-max gap-16">
-        <CloudPuff className="translate-y-2" />
-        <CloudPuff className="-translate-y-1" />
-        <CloudPuff className="translate-y-3" />
-        <CloudPuff className="-translate-y-2" />
-        <CloudPuff className="translate-y-1" />
-        <CloudPuff className="-translate-y-1" />
-      </div>
+    <motion.div ref={ref} className="overflow-hidden py-6" style={{ y }} aria-hidden>
+      <motion.div style={{ x }}>
+        <div className="cloud-divider-track flex w-max gap-16">
+          <CloudPuff className="translate-y-2" />
+          <CloudPuff className="-translate-y-1" />
+          <CloudPuff className="translate-y-3" />
+          <CloudPuff className="-translate-y-2" />
+          <CloudPuff className="translate-y-1" />
+          <CloudPuff className="-translate-y-1" />
+        </div>
+      </motion.div>
     </motion.div>
   )
 }

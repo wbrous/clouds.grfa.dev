@@ -12,14 +12,15 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { QuizCard } from '@/components/QuizCard'
 
-type Answer = { cloudId: string; picked: string; correct: boolean }
+type Answer = { cloudId: string; image: string; picked: string; correct: boolean }
+type QuizItem = { cloud: Cloud; image: string }
 
 type QuizState =
   | { phase: 'start' }
   | {
       phase: 'round'
       round: number
-      order: Cloud[]
+      order: QuizItem[]
       choices: Cloud[]
       picked: string | null
       answers: Answer[]
@@ -32,7 +33,7 @@ type QuizAction =
   | { type: 'next' }
   | { type: 'restart' }
 
-const TOTAL = 10
+const TOTAL = 16
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -43,8 +44,25 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-function buildRound(order: Cloud[], round: number, answers: Answer[]) {
-  const cloud = order[round]
+/** One photo per genus first (so every cloud shows up), then top up with
+ * extra photos of random genera so repeats bring a fresh picture. */
+function buildOrder(): QuizItem[] {
+  const firstPass: QuizItem[] = shuffle(CLOUDS).map((cloud) => {
+    const [image] = shuffle(cloud.images)
+    return { cloud, image }
+  })
+  const remaining: QuizItem[] = []
+  for (const item of firstPass) {
+    for (const image of item.cloud.images) {
+      if (image !== item.image) remaining.push({ cloud: item.cloud, image })
+    }
+  }
+  const extra = shuffle(remaining).slice(0, Math.max(0, TOTAL - firstPass.length))
+  return shuffle([...firstPass, ...extra]).slice(0, TOTAL)
+}
+
+function buildRound(order: QuizItem[], round: number, answers: Answer[]) {
+  const cloud = order[round].cloud
   const distractors = shuffle(CLOUDS.filter((c) => c.id !== cloud.id)).slice(0, 3)
   return {
     phase: 'round' as const,
@@ -60,18 +78,17 @@ function reducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
     case 'start':
     case 'restart': {
-      const order = shuffle(CLOUDS).slice(0, TOTAL)
-      return buildRound(order, 0, [])
+      return buildRound(buildOrder(), 0, [])
     }
     case 'pick':
       if (state.phase !== 'round' || state.picked !== null) return state
       return { ...state, picked: action.id }
     case 'next': {
       if (state.phase !== 'round' || state.picked === null) return state
-      const cloud = state.order[state.round]
+      const { cloud, image } = state.order[state.round]
       const answers = [
         ...state.answers,
-        { cloudId: cloud.id, picked: state.picked, correct: state.picked === cloud.id },
+        { cloudId: cloud.id, image, picked: state.picked, correct: state.picked === cloud.id },
       ]
       if (state.round + 1 >= TOTAL) return { phase: 'done', answers }
       return buildRound(state.order, state.round + 1, answers)
@@ -137,7 +154,7 @@ export function QuizPage() {
   }
 
   if (state.phase === 'round') {
-    const cloud = state.order[state.round]
+    const { cloud, image } = state.order[state.round]
     return (
       <div className="px-4 py-8">
         <AnimatePresence mode="wait">
@@ -150,6 +167,7 @@ export function QuizPage() {
           >
         <QuizCard
           cloud={cloud}
+          image={image}
           round={state.round + 1}
           total={TOTAL}
           picks={state.choices}
@@ -200,7 +218,7 @@ export function QuizPage() {
               className="flex items-center gap-3 rounded-[var(--radius-md)] border border-white/50 glass p-3"
             >
               <img
-                src={cloud.image}
+                src={answer.image}
                 alt={cloud.name}
                 loading="lazy"
                 className="size-16 shrink-0 rounded-md object-cover"

@@ -15,15 +15,40 @@
   --accent-border: rgba(124, 107, 217, 0.5);
   --social-bg: rgba(233, 228, 245, 0.5);
   --shadow: rgba(98, 72, 158, 0.18) 0 12px 24px -8px;
-  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg: rgba(255, 255, 255, 0.5);
   --glass-border: rgba(255, 255, 255, 0.65);
   --glass-shadow: rgba(98, 72, 158, 0.16) 0 8px 24px -6px,
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.65);
+    rgba(98, 72, 158, 0.1) 0 1px 2px -1px,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 12px 0 rgba(124, 107, 217, 0.08);
   --glass-sheen: linear-gradient(
     115deg,
-    rgba(255, 255, 255, 0.35) 0%,
-    rgba(255, 255, 255, 0) 40%
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.12) 30%,
+    rgba(255, 255, 255, 0) 55%
   );
+  --glass-rim: conic-gradient(
+    from 205deg at 50% 0%,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.08) 28%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(124, 107, 217, 0.18) 78%,
+    rgba(255, 255, 255, 0.95)
+  );
+  --glass-rim-ultra: conic-gradient(
+    from 205deg at 50% 0%,
+    rgba(255, 255, 255, 1),
+    rgba(179, 213, 255, 0.5) 16%,
+    rgba(255, 255, 255, 0.1) 30%,
+    rgba(255, 255, 255, 0) 48%,
+    rgba(255, 197, 233, 0.45) 68%,
+    rgba(184, 164, 255, 0.55) 84%,
+    rgba(255, 255, 255, 1)
+  );
+  --glass-shadow-ultra: rgba(98, 72, 158, 0.28) 0 20px 45px -12px,
+    rgba(98, 72, 158, 0.16) 0 6px 16px -6px,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 14px 0 rgba(124, 107, 217, 0.1);
 
   --sans: 'Inter Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: 'Fraunces Variable', serif;
@@ -137,22 +162,72 @@ code {
 .glass {
   position: relative;
   background: var(--glass-bg);
-  backdrop-filter: blur(10px) saturate(160%);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(180%) url(#liquid-glass);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
   box-shadow: var(--glass-shadow);
+  transition: box-shadow 0.4s ease;
 }
+/* sheen: a soft highlight that slides across the glass on hover, like light
+   catching a curved surface */
 .glass::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   background: var(--glass-sheen);
+  background-size: 180% 180%;
+  background-position: 0% 0%;
+  transition: background-position 0.7s ease;
   pointer-events: none;
+}
+.glass:hover::before {
+  background-position: 100% 60%;
+}
+/* rim: a thin gradient ring simulating refraction bending light around the
+   bevel of the glass */
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--glass-rim);
+  opacity: 0.7;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* the floating top bar: heavier blur, chromatic-aberrated refraction, and a
+   brighter iridescent rim so it reads as a distinct pane of glass hovering
+   above the page */
+.glass-ultra {
+  background: rgba(240, 244, 255, 0.42);
+  backdrop-filter: blur(30px) saturate(160%) url(#liquid-glass-ultra);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+  box-shadow: var(--glass-shadow-ultra);
+}
+.glass-ultra::before {
+  background-size: 220% 220%;
+}
+.glass-ultra::after {
+  background: var(--glass-rim-ultra);
+  opacity: 1;
+  padding: 1.5px;
 }
 
 .glass-scrolled {
   box-shadow: rgba(98, 72, 158, 0.22) 0 8px 24px -6px,
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.65);
+    rgba(98, 72, 158, 0.12) 0 1px 2px -1px,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 12px 0 rgba(124, 107, 217, 0.1);
+}
+.glass-ultra.glass-scrolled {
+  box-shadow: rgba(98, 72, 158, 0.34) 0 26px 55px -14px,
+    rgba(98, 72, 158, 0.18) 0 8px 20px -8px,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 14px 0 rgba(124, 107, 217, 0.12);
 }
 
 @keyframes drift {

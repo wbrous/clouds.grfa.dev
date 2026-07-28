@@ -11,28 +11,30 @@ export function TopNav({ route }: { route: Route }) {
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 24))
 
   return (
-    <header
-      className={cn(
-        'sticky top-0 z-10 glass transition-shadow',
-        scrolled && 'glass-scrolled',
-      )}
-    >
-      <nav className="flex items-center justify-center gap-3 px-4 py-3">
-        <a
-          href="#/"
-          className="mr-auto flex items-center gap-2 font-heading text-xl font-semibold text-foreground no-underline"
-        >
-          <CloudSun className="size-6 text-primary" aria-hidden />
-          The Cloud Atlas
-        </a>
-        <NavPill href="#/" active={route === 'atlas'}>
-          Atlas
-        </NavPill>
-        <NavPill href="#/quiz" active={route === 'quiz'}>
-          Quiz
-        </NavPill>
-      </nav>
-    </header>
+    <div className="sticky top-3 z-20 px-3 pb-3 sm:top-4 sm:px-6 sm:pb-4">
+      <header
+        className={cn(
+          'glass glass-ultra mx-auto max-w-2xl rounded-full transition-shadow',
+          scrolled && 'glass-scrolled',
+        )}
+      >
+        <nav className="flex items-center justify-center gap-2 px-3 py-2 sm:gap-3 sm:px-5 sm:py-2.5">
+          <a
+            href="#/"
+            className="mr-auto flex items-center gap-2 font-heading text-xl font-semibold text-foreground no-underline"
+          >
+            <CloudSun className="size-6 shrink-0 text-primary" aria-hidden />
+            <span className="hidden sm:inline">The Cloud Atlas</span>
+          </a>
+          <NavPill href="#/" active={route === 'atlas'}>
+            Atlas
+          </NavPill>
+          <NavPill href="#/quiz" active={route === 'quiz'}>
+            Quiz
+          </NavPill>
+        </nav>
+      </header>
+    </div>
   )
 }
 

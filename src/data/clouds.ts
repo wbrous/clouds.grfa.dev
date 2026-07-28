@@ -13,6 +13,8 @@ export type Cloud = {
   lookFor: string[]
   funFact: string
   image: string
+  /** every photo of this genus available for the quiz, cover image included */
+  images: string[]
   credit: string
 }
 
@@ -38,7 +40,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'Cirrus can race along at over 160 km/h, pulled by jet-stream winds, while the air at the ground stays perfectly calm.',
     image: '/clouds/cirrus.jpg',
-    credit: 'Wikimedia Commons · CC BY-SA 3.0',
+    images: ['/clouds/cirrus.jpg', '/clouds/cirrus-2.jpg', '/clouds/cirrus-3.jpg'],
+    credit: 'Wikimedia Commons · CC BY-SA',
   },
   {
     id: 'cirrostratus',
@@ -56,7 +59,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'The 22-degree halo cirrostratus makes is produced by ice crystals shaped like tiny hexagonal pencils bending the light.',
     image: '/clouds/cirrostratus.jpg',
-    credit: 'Wikimedia Commons · Public domain',
+    images: ['/clouds/cirrostratus.jpg', '/clouds/cirrostratus-2.jpg', '/clouds/cirrostratus-3.jpg'],
+    credit: 'Wikimedia Commons · Public domain / CC BY-SA',
   },
   {
     id: 'cirrocumulus',
@@ -74,7 +78,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       '"Mackerel sky and mares\' tails make lofty ships carry low sails" — sailors read cirrocumulus as a warning of coming wind.',
     image: '/clouds/cirrocumulus.jpg',
-    credit: 'Wikimedia Commons · CC BY-SA 3.0',
+    images: ['/clouds/cirrocumulus.jpg', '/clouds/cirrocumulus-2.jpg', '/clouds/cirrocumulus-3.jpg'],
+    credit: 'Wikimedia Commons · CC BY-SA',
   },
   {
     id: 'altocumulus',
@@ -92,7 +97,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'Altocumulus at sunrise on a humid summer morning can warn of thunderstorms by late afternoon.',
     image: '/clouds/altocumulus.jpg',
-    credit: 'Wikimedia Commons · CC BY-SA 3.0',
+    images: ['/clouds/altocumulus.jpg', '/clouds/altocumulus-2.jpg', '/clouds/altocumulus-3.jpg'],
+    credit: 'Wikimedia Commons · CC BY-SA',
   },
   {
     id: 'altostratus',
@@ -110,7 +116,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'Altostratus often begins as cirrostratus that thickens and sinks — watch one all day and you can see a storm build level by level.',
     image: '/clouds/altostratus.jpg',
-    credit: 'Wikimedia Commons · CC0',
+    images: ['/clouds/altostratus.jpg', '/clouds/altostratus-2.jpg', '/clouds/altostratus-3.jpg'],
+    credit: 'Wikimedia Commons · CC0 / CC BY-SA',
   },
   {
     id: 'nimbostratus',
@@ -128,7 +135,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'Nimbostratus is so thick it can span several kilometres top to bottom, which is why its rain can outlast any thunderstorm.',
     image: '/clouds/nimbostratus.jpg',
-    credit: 'Wikimedia Commons · CC BY-SA 3.0',
+    images: ['/clouds/nimbostratus.jpg', '/clouds/nimbostratus-2.jpg', '/clouds/nimbostratus-3.jpg'],
+    credit: 'Wikimedia Commons · CC BY-SA',
   },
   {
     id: 'stratocumulus',
@@ -146,7 +154,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'Huge sheets of stratocumulus over cool oceans are visible from space as giant cotton fields — they reflect enough sunlight to help cool the planet.',
     image: '/clouds/stratocumulus.jpg',
-    credit: 'Wikimedia Commons · CC BY-SA 4.0',
+    images: ['/clouds/stratocumulus.jpg', '/clouds/stratocumulus-2.jpg', '/clouds/stratocumulus-3.jpg'],
+    credit: 'Wikimedia Commons · CC BY / CC BY-SA',
   },
   {
     id: 'stratus',
@@ -164,7 +173,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'When stratus touches the ground it is simply fog — the only difference between the two is whether you are inside it.',
     image: '/clouds/stratus.jpg',
-    credit: 'Wikimedia Commons · CC BY-SA 3.0',
+    images: ['/clouds/stratus.jpg', '/clouds/stratus-2.jpg', '/clouds/stratus-3.jpg'],
+    credit: 'Wikimedia Commons · CC BY-SA',
   },
   {
     id: 'cumulus',
@@ -182,7 +192,8 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'A modest summer cumulus weighs about as much as 100 elephants — it floats because that mass is spread over billions of droplets in rising air.',
     image: '/clouds/cumulus.jpg',
-    credit: 'Wikimedia Commons · CC BY-SA 2.0',
+    images: ['/clouds/cumulus.jpg', '/clouds/cumulus-2.jpg', '/clouds/cumulus-3.jpg'],
+    credit: 'Wikimedia Commons · CC BY-SA',
   },
   {
     id: 'cumulonimbus',
@@ -200,6 +211,7 @@ export const CLOUDS: Cloud[] = [
     funFact:
       'A single cumulonimbus can hold more energy than ten atomic bombs and climb higher than Mount Everest in under an hour.',
     image: '/clouds/cumulonimbus.jpg',
-    credit: 'Wikimedia Commons · Public domain',
+    images: ['/clouds/cumulonimbus.jpg', '/clouds/cumulonimbus-2.jpg', '/clouds/cumulonimbus-3.jpg'],
+    credit: 'Wikimedia Commons · Public domain / CC BY / CC BY-SA',
   },
 ]

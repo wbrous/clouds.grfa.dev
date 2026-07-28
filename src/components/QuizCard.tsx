@@ -5,6 +5,7 @@ import type { Cloud } from '@/data/clouds'
 
 type QuizCardProps = {
   cloud: Cloud
+  image: string
   round: number
   total: number
   picks: Cloud[]
@@ -16,6 +17,7 @@ type QuizCardProps = {
 
 export function QuizCard({
   cloud,
+  image,
   round,
   total,
   picks,
@@ -30,7 +32,7 @@ export function QuizCard({
         Cloud {round} of {total}
       </p>
       <img
-        src={cloud.image}
+        src={image}
         alt="Mystery cloud — what genus is it?"
         loading="eager"
         className="aspect-[4/3] w-full rounded-[var(--radius)] border border-border object-cover shadow-(--shadow)"

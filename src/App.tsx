@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Heart } from 'lucide-react'
 import { TopNav } from '@/components/TopNav'
 import { SkyPuffs } from '@/components/SkyPuffs'
 import { CloudDivider } from '@/components/CloudDivider'
@@ -32,6 +33,19 @@ function App() {
         <CloudDivider />
         <p className="text-center text-sm text-muted-foreground">
           Photos from Wikimedia Commons · Built for looking up
+        </p>
+        <p className="mt-1 flex items-center justify-center gap-1.5 text-center text-sm text-muted-foreground">
+          Made with
+          <Heart className="size-3.5 fill-destructive text-destructive" aria-label="love" />
+          by{' '}
+          <a
+            href="https://github.com/wbrous"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-foreground no-underline hover:underline"
+          >
+            Gir0fa
+          </a>
         </p>
       </footer>
     </>
