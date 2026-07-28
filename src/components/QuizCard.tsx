@@ -76,7 +76,7 @@ export function QuizCard({
                     className={isCorrect ? 'text-primary' : 'text-destructive/25'}
                   />
                 )}
-                {pick.name}
+                <span className="relative z-10">{pick.name}</span>
               </Button>
             </motion.div>
           )
