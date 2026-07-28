@@ -203,9 +203,9 @@ code {
    brighter iridescent rim so it reads as a distinct pane of glass hovering
    above the page */
 .glass-ultra {
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(30px) saturate(220%) brightness(1.05) url(#liquid-glass-ultra);
-  -webkit-backdrop-filter: blur(30px) saturate(220%) brightness(1.05);
+  background: rgba(240, 244, 255, 0.42);
+  backdrop-filter: blur(30px) saturate(160%) url(#liquid-glass-ultra);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
   box-shadow: var(--glass-shadow-ultra);
 }
 .glass-ultra::before {
