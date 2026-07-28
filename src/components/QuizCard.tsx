@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
+import { LiquidFill } from '@/components/LiquidFill'
 import { cn } from '@/lib/utils'
 import type { Cloud } from '@/data/clouds'
 
@@ -58,17 +59,23 @@ export function QuizCard({
                 disabled={picked !== null}
                 onClick={() => onPick(pick.id)}
                 className={cn(
-                  'h-auto w-full rounded-[var(--radius-md)] border-white/50 bg-card glass py-3 font-heading text-lg whitespace-normal',
-                  picked !== null &&
-                    isCorrect &&
-                    'border-primary bg-primary! text-primary-foreground hover:bg-primary!',
+                  'relative isolate h-auto w-full rounded-[var(--radius-md)] border-white/50 bg-card glass py-3 font-heading text-lg whitespace-normal',
+                  picked !== null && isCorrect && 'border-primary text-primary-foreground',
                   picked !== null &&
                     isPicked &&
                     !isCorrect &&
-                    'border-destructive bg-destructive/15! text-destructive hover:bg-destructive/15!',
+                    'border-destructive text-destructive',
                   picked !== null && !isCorrect && !isPicked && 'opacity-50',
                 )}
               >
+                {/* the answer fills with water, revealing whether it was the
+                    right call */}
+                {picked !== null && (isCorrect || isPicked) && (
+                  <LiquidFill
+                    splash
+                    className={isCorrect ? 'text-primary' : 'text-destructive/25'}
+                  />
+                )}
                 {pick.name}
               </Button>
             </motion.div>
