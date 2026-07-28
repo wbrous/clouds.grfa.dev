@@ -1,21 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Heart } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
+import { useReducedMotion } from 'motion/react'
 import { TopNav } from '@/components/TopNav'
 import { SkyPuffs } from '@/components/SkyPuffs'
 import { CloudDivider } from '@/components/CloudDivider'
+import { RainTransition, type FloodPhase } from '@/components/RainTransition'
 import { AtlasPage } from '@/pages/AtlasPage'
 import { QuizPage } from '@/pages/QuizPage'
 
 type Route = 'atlas' | 'quiz'
-
-const ROUTE_ORDER: Record<Route, number> = { atlas: 0, quiz: 1 }
-
-const pageVariants = {
-  enter: (dir: number) => ({ opacity: 0, x: dir < 0 ? -48 : 48 }),
-  center: { opacity: 1, x: 0 },
-  exit: (dir: number) => ({ opacity: 0, x: dir < 0 ? 48 : -48 }),
-}
 
 function useRoute(): Route {
   const [r, setR] = useState<Route>(
@@ -31,32 +24,28 @@ function useRoute(): Route {
 
 function App() {
   const route = useRoute()
-  const prevIndex = useRef(ROUTE_ORDER[route])
-  const direction = ROUTE_ORDER[route] - prevIndex.current
+  const reduced = useReducedMotion()
+  /* The page on screen lags the route while the water is on its way up, so the
+     swap happens hidden behind a flooded screen. */
+  const [shown, setShown] = useState<Route>(route)
+  const [phase, setPhase] = useState<FloodPhase>('idle')
 
   useEffect(() => {
-    prevIndex.current = ROUTE_ORDER[route]
-    window.scrollTo(0, 0)
-  }, [route])
+    if (route === shown) return
+    if (reduced) {
+      setShown(route)
+      window.scrollTo(0, 0)
+      return
+    }
+    setPhase('flood')
+  }, [route, shown, reduced])
 
   return (
     <>
       <SkyPuffs />
       <TopNav route={route} />
       <main className="flex-1 overflow-x-clip">
-        <AnimatePresence mode="wait" initial={false} custom={direction}>
-          <motion.div
-            key={route}
-            custom={direction}
-            variants={pageVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ type: 'spring', visualDuration: 0.45, bounce: 0.15 }}
-          >
-            {route === 'quiz' ? <QuizPage /> : <AtlasPage />}
-          </motion.div>
-        </AnimatePresence>
+        {shown === 'quiz' ? <QuizPage /> : <AtlasPage />}
       </main>
       <footer className="pb-8">
         <CloudDivider />
@@ -74,6 +63,15 @@ function App() {
           </a>
         </p>
       </footer>
+      <RainTransition
+        phase={phase}
+        onFlooded={() => {
+          setShown(route)
+          window.scrollTo(0, 0)
+          setPhase('drain')
+        }}
+        onDrained={() => setPhase('idle')}
+      />
     </>
   )
 }

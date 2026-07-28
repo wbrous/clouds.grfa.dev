@@ -292,10 +292,26 @@ code {
   animation-direction: reverse;
 }
 
+/* the full-screen flood is a slower, choppier body of water than the small
+   button fills, so it gets its own (slower) scroll speeds rather than sharing
+   .liquid-crest/.liquid-crest-lag */
+.liquid-crest-flood {
+  animation: liquid-crest-scroll 5.5s linear infinite;
+}
+.liquid-crest-flood-lag {
+  animation: liquid-crest-scroll 8.5s linear infinite reverse;
+}
+.liquid-crest-flood-far {
+  animation: liquid-crest-scroll 13s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cloud-divider-track,
   .sky-puff-track,
-  .liquid-crest {
+  .liquid-crest,
+  .liquid-crest-flood,
+  .liquid-crest-flood-lag,
+  .liquid-crest-flood-far {
     animation: none;
   }
 }

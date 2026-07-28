@@ -1,17 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react'
+import { CREST } from '@/lib/liquid'
 import { cn } from '@/lib/utils'
-
-/**
- * Four wave periods across a 200-unit viewBox, oscillating around the vertical
- * centre (y=20) so the crest can be centred on the waterline. Rendered at 200%
- * width and scrolled by -50% (= 100 units = 2 whole periods) to loop seamlessly.
- */
-const CREST =
-  'M0,20 C8.33,12 16.67,12 25,20 C33.33,28 41.67,28 50,20 ' +
-  'C58.33,12 66.67,12 75,20 C83.33,28 91.67,28 100,20 ' +
-  'C108.33,12 116.67,12 125,20 C133.33,28 141.67,28 150,20 ' +
-  'C158.33,12 166.67,12 175,20 C183.33,28 191.67,28 200,20 ' +
-  'L200,40 L0,40 Z'
 
 /** Thrown over the rim as the water reaches the top. */
 const DROPLETS = [
@@ -27,6 +16,10 @@ type LiquidFillProps = {
   className?: string
   /** droplets flung over the rim as the water lands */
   splash?: boolean
+  /** false drains the water back out of the bottom */
+  filled?: boolean
+  /** height of the wave band; scale it down inside small controls */
+  crestHeight?: number
 }
 
 /**
@@ -36,7 +29,12 @@ type LiquidFillProps = {
  * shows up in the surface: the crest is choppy and tilts while the water is
  * moving, then damps level once it settles.
  */
-export function LiquidFill({ className, splash = false }: LiquidFillProps) {
+export function LiquidFill({
+  className,
+  splash = false,
+  filled = true,
+  crestHeight = 24,
+}: LiquidFillProps) {
   const reduced = useReducedMotion()
 
   if (reduced) {
@@ -46,7 +44,7 @@ export function LiquidFill({ className, splash = false }: LiquidFillProps) {
         className={cn('pointer-events-none absolute inset-0 bg-current', className)}
         style={{ zIndex: 0, borderRadius: 'inherit' }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: filled ? 1 : 0 }}
         transition={{ duration: 0.2 }}
       />
     )
@@ -66,15 +64,21 @@ export function LiquidFill({ className, splash = false }: LiquidFillProps) {
         <motion.span
           className="absolute inset-x-0 top-0 -bottom-4"
           initial={{ y: '100%' }}
-          animate={{ y: '0%' }}
-          transition={{ duration: 0.7, ease: [0.45, 0, 0.2, 1] }}
+          animate={{ y: filled ? '0%' : '100%' }}
+          transition={
+            filled
+              ? { duration: 0.7, ease: [0.45, 0, 0.2, 1] }
+              : { duration: 0.5, ease: [0.5, 0, 0.75, 1] }
+          }
         >
           {/* the crest straddles the top of the body — its own centre line is
               the waterline, so it can tilt and flatten without ever tearing a
-              gap between the wave and the liquid below it */}
+              gap between the wave and the liquid below it. Keyed so the slosh
+              replays each time the level changes direction. */}
           <motion.span
-            className="absolute inset-x-0 bottom-full h-6"
-            style={{ y: '50%' }}
+            key={filled ? 'in' : 'out'}
+            className="absolute inset-x-0 bottom-full"
+            style={{ height: crestHeight, y: '50%' }}
             initial={{ scaleY: 1, rotate: 0 }}
             animate={{ scaleY: 0.18, rotate: [0, -0.5, 0.9, -0.55, 0.28, -0.1, 0] }}
             transition={{
@@ -109,6 +113,7 @@ export function LiquidFill({ className, splash = false }: LiquidFillProps) {
         </motion.span>
       </span>
       {splash &&
+        filled &&
         DROPLETS.map((drop) => (
           <motion.span
             key={drop.left}
