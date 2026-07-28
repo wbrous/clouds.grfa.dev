@@ -13,7 +13,7 @@ export function TopNav({ route }: { route: Route }) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-10 glass transition-shadow',
+        'sticky top-0 z-10 glass glass-strong transition-shadow',
         scrolled && 'glass-scrolled',
       )}
     >
